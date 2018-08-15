@@ -2,7 +2,7 @@
 #
 #  Description:  This file holds all my BASH configurations and aliases
 #
-#		Forked: Nathaniel Landau https://natelandau.com/my-mac-osx-bash_profile
+#  Forked: Nathaniel Landau https://natelandau.com/my-mac-osx-bash_profile
 #
 #  Sections:
 #  1.   Environment Configuration
