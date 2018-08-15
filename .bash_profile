@@ -2,6 +2,8 @@
 #
 #  Description:  This file holds all my BASH configurations and aliases
 #
+#		Forked: Nathaniel Landau https://natelandau.com/my-mac-osx-bash_profile
+#
 #  Sections:
 #  1.   Environment Configuration
 #  2.   Make Terminal Better (remapping defaults and adding functionality)
@@ -11,7 +13,7 @@
 #  6.   Networking
 #  7.   System Operations & Information
 #  8.   Web Development
-#  9.	My Additional Aliases
+#  9.		My Additional Aliases
 #  10.  Reminders & Notes
 #
 #  ---------------------------------------------------------------------------
@@ -19,6 +21,9 @@
 #   -------------------------------
 #   1.  ENVIRONMENT CONFIGURATION
 #   -------------------------------
+
+#	Export TERM
+	export TERM=xterm-color
 
 #   Change Prompt
 #   ------------------------------------------------------------
@@ -30,7 +35,7 @@
     export PATH="$PATH:/usr/local/bin"
     export PATH="/usr/local/git/bin:/sw/bin:/usr/local:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
 #	swap the PHP used on the command line
-	export PATH="$(brew --prefix homebrew/php/php70)/bin:$PATH"
+#	export PATH="$(brew --prefix homebrew/php/php70)/bin:$PATH"
 
 #   Set Default Editor (change 'Nano' to the editor of your choice)
 #   ------------------------------------------------------------
@@ -47,7 +52,7 @@
 #   ------------------------------------------------------------
 	export CLICOLOR=1
 	export LSCOLORS=ExFxBxDxCxegedabagacad
-   
+
 #   Source ~/.bashrc
 #   ------------------------------------------------------------
 	source ~/.bashrc
@@ -82,6 +87,7 @@ alias cic='set completion-ignore-case On'   # cic:          Make tab-completion 
 mcd () { mkdir -p "$1" && cd "$1"; }        # mcd:          Makes new Dir and jumps inside
 trash () { command mv "$@" ~/.Trash ; }     # trash:        Moves a file to the MacOS trash
 ql () { qlmanage -p "$*" >& /dev/null; }    # ql:           Opens any file in MacOS Quicklook Preview
+appV () { mdls -name kMDItemVersion "$*"; }	# appV:			Gets the version of any app in path provided
 alias DT='tee ~/Desktop/terminalOut.txt'    # DT:           Pipe content to file on MacOS Desktop
 
 #	Verify & Repair disk permissions
@@ -100,18 +106,32 @@ alias lr='ls -R | grep ":$" | sed -e '\''s/:$//'\'' -e '\''s/[^-][^\/]*\//--/g'\
         man $1 | grep -iC2 --color=always $2 | less
     }
 
+#	Check SHA1 with value in clipboard
+#   ------------------------------------------
+shachk() {
+    [[ $(pbpaste) == $(shasum "$@" | awk '{print $1}') ]] \
+    && echo $1 == $(pbpaste) $'\e[1;32mMATCHES\e[0m' && return; \
+    echo $1 != $(pbpaste) $'\e[1;31mFAILED\e[0m' ;
+}
+#   ------------------------------------------
+
 #   showa: to remind yourself of an alias (given some part of it)
 #   ------------------------------------------------------------
     showa () { /usr/bin/grep --color=always -i -a1 $@ ~/Library/init/bash/aliases.bash | grep -v '^\s*$' | less -FSRXc ; }
 
+#   ------------------------------------------
+#	JSS PYTHON ALIASES
+alias pyjss='jss_helper -v'
+
+
 
 #   SSH Fixes and aliases
 #   ------------------------------------------------------------
-alias sshsock='unset SSH_AUTH_SOCK'			# sshsock		unsets the sock if SSH stops working
+#alias sshsock='unset SSH_AUTH_SOCK'			# sshsock		unsets the sock if SSH stops working
 #	Fixes the SSH issue where its not loading properly
-alias sshfix='launchctl unload /System/Library/LaunchAgents/org.openbsd.ssh-agent.plist \
-			&& launchctl load -w /System/Library/LaunchAgents/org.openbsd.ssh-agent.plist \
-				&& launchctl start org.openbsd.ssh-agent'
+#alias sshfix='launchctl unload /System/Library/LaunchAgents/org.openbsd.ssh-agent.plist \
+#			&& launchctl load -w /System/Library/LaunchAgents/org.openbsd.ssh-agent.plist \
+#				&& launchctl start org.openbsd.ssh-agent'
 #   -------------------------------
 #   3.  FILE AND FOLDER MANAGEMENT
 #   -------------------------------
@@ -122,7 +142,7 @@ alias make1mb='mkfile 1m ./1MB.dat'         # make1mb:      Creates a file of 1m
 alias make5mb='mkfile 5m ./5MB.dat'         # make5mb:      Creates a file of 5mb size (all zeros)
 alias make10mb='mkfile 10m ./10MB.dat'      # make10mb:     Creates a file of 10mb size (all zeros)
 
-#   cdf:  'Cd's to frontmost window of MacOS Finder
+#   cdf:   to frontmost window of MacOS Finder
 #   ------------------------------------------------------
     cdf () {
         currFolderPath=$( /usr/bin/osascript <<EOT
@@ -222,7 +242,7 @@ ffe () { /usr/bin/find . -name '*'"$@" ; }  # ffe:      Find file whose name end
 alias myip='dig +short myip.opendns.com @resolver1.opendns.com'	# myip:         Public facing IP Address
 alias netCons='lsof -i'                             			# netCons:      Show all open TCP/IP sockets
 																# flushDNS:     Flush out the DNS Cache
-alias flushDNS='dscacheutil -flushcache && sudo killall -HUP mDNSResponder'            			
+alias flushDNS='dscacheutil -flushcache && sudo killall -HUP mDNSResponder'
 alias lsock='sudo /usr/sbin/lsof -i -P'             			# lsock:        Display open sockets
 alias lsockU='sudo /usr/sbin/lsof -nP | grep UDP'   			# lsockU:       Display only open UDP sockets
 alias lsockT='sudo /usr/sbin/lsof -nP | grep TCP'   			# lsockT:       Display only open TCP sockets
@@ -292,7 +312,7 @@ httpHeaders () { /usr/bin/curl -I -L $@ ; }             # httpHeaders:      Grab
 #   ---------------------------------------
 
 alias appVer='mdls -name kMDItemVersion'				# appVer:			Followed by path/to/app gives app version
-alias macModel=`system_profiler SPHardwareDataType | grep "Model Identifier" | awk '{ print $3; }'`	
+alias macModel=`system_profiler SPHardwareDataType | grep "Model Identifier" | awk '{ print $3; }'`
 alias activeFont=`system_profiler SPFontsDataType | grep -i "Full Name" | awk '{$1=$2=""; print $0}'`
 alias cls=`clear`
 alias claer='clear'
