@@ -8,8 +8,9 @@ Since then I have cleared out ones that I do not use much, if at all, and added 
 
 Some additions:
 
-pyjss:  Added this for use with [JSS Python Helper](https://github.com/sheagcraig/jss_helper)
-appV:   Displays the `kMDItemVersion` information
+pyjss:    Added this for use with [JSS Python Helper](https://github.com/sheagcraig/jss_helper)
+appV:     Displays the `kMDItemVersion` information
+flushDNS: Flushes DNS cache.
 
 Some apps were installed and the defaults remapped to these after reading [Remy Sharps blog on his improved CLi](https://remysharp.com/2018/08/23/cli-improved)
 
