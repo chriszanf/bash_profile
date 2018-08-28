@@ -17,9 +17,9 @@ The following apps were installed using [Homebrew](https://brew.sh)
 
 `brew install bat prettyping fzf glances diff-so-fancy fd nnn tldr ack ag jq`
 
-cat -> bat
-ping -> prettyping
-du -> ncdu
-help -> tldr
-preview -> fzf
-top -> glances
+cat -> bat    
+ping -> prettyping    
+du -> ncdu    
+help -> tldr    
+preview -> fzf    
+top -> glances    
