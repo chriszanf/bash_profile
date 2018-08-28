@@ -57,13 +57,13 @@ alias path='echo -e ${PATH//:/\\n}'                                             
 alias show_options='shopt'                                                                # Show_options: display bash options settings
 alias fix_stty='stty sane'                                                                # fix_stty:     Restore terminal settings when screwed up
 alias cic='set completion-ignore-case On'                                                 # cic:          Make tab-completion case-insensitive
-alias pyjss='jss_helper -v'																  # JSS Python alias
-alias appVer='mdls -name kMDItemVersion' 												  # appVer:			Followed by path/to/app gives app version
+alias pyjss='jss_helper -v'																                                # JSS Python alias
+alias appVer='mdls -name kMDItemVersion' 												                          # appVer:			Followed by path/to/app gives app version
 alias macModel=$(system_profiler SPHardwareDataType | grep "Model Identifier" | awk '{ print $3; }')
 alias activeFont=$(system_profiler SPFontsDataType | grep -i "Full Name" | awk '{$1=$2=""; print $0}')
 alias cls=$(clear)
 alias claer='clear'
-alias clr='clear' 																		  # cls: claer: clr: 3 ways of clearing the CLi
+alias clr='clear' 																		                                    # cls: claer: clr: 3 ways of clearing the CLi
 
 # The following are additonal apps added after reading: https://remysharp.com/2018/08/23/cli-improved
 # Brew command:
@@ -99,17 +99,15 @@ mcd() { mkdir -p "$1" && cd "$1"; }                                             
 trash() { command mv "$@" ~/.Trash; }                                                     # trash:        Moves a file to the MacOS trash
 ql() { qlmanage -p "$*" >&/dev/null; }                                                    # ql:           Opens any file in MacOS Quicklook Preview
 appV() { mdls -name kMDItemVersion "$*"; }                                                # appV: 		  Gets the version of any app in path provided
-cd() { builtin cd "$@"
+cd() { builtin cd "$@"                                                                    # Always list directory contents upon 'cd'
   ll
 }
-																						  # Always list directory contents upon 'cd'
-#   mans: Example: mans mplayer codec
-mans() {
+
+mans() {                                                                                  # mans: Example: mans mplayer codec
   man $1 | grep -iC2 --color=always $2 | less
 }
 
-#	Check SHA1 with value in clipboard
-shachk() {
+shachk() {                                                                                #	Check SHA1 with value in clipboard
   [[ $(pbpaste) == $(shasum "$@" | awk '{print $1}') ]] &&
     echo $1 == $(pbpaste) $'\e[1;32mMATCHES\e[0m' && return
   echo $1 != $(pbpaste) $'\e[1;31mFAILED\e[0m'
