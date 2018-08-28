@@ -1,22 +1,17 @@
 #  ---------------------------------------------------------------------------
-#
 #  Description:  This file holds all my BASH configurations and aliases
 #
-#  Forked: Nathaniel Landau https://natelandau.com/my-mac-osx-bash_profile
+#  Forked from Nathaniel Landau https://natelandau.com/my-mac-osx-bash_profile
 #
 #  Sections:
 #  1.   Environment Configuration
-#  2.   Make Terminal Better (remapping defaults and adding functionality)
-#  3.   File and Folder Management
-#  4.   Searching
-#  5.   Process Management
-#  6.   Networking
-#  7.   System Operations & Information
-#  8.   Web Development
-#  9.		My Additional Aliases
-#  10.  Reminders & Notes
-#
+#  2.	  Terminal Improvements
+#  3. 	Folder and File management
+#  4.	  Searching
+#  5.	  Process Management
+#. 6. 	Networking
 #  ---------------------------------------------------------------------------
+
 
 #   -------------------------------
 #   1.  ENVIRONMENT CONFIGURATION
@@ -26,39 +21,27 @@
 export TERM=xterm-color
 
 #   Change Prompt
-#   ------------------------------------------------------------
-#   export PS1="\w @ \h: "
 export PS1="\[\033[36m\]\u\[\033[m\]@\[\033[32m\]\h:\[\033[33;1m\]\w\[\033[m\]\$ "
 
-#   Set Paths
-#   ------------------------------------------------------------
-export PATH="$PATH:/usr/local/bin"
-export PATH="/usr/local/git/bin:/sw/bin:/usr/local:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
-#	swap the PHP used on the command line
-#	export PATH="$(brew --prefix homebrew/php/php70)/bin:$PATH"
-
 #   Set Default Editor (change 'Nano' to the editor of your choice)
-#   ------------------------------------------------------------
 export EDITOR=/usr/bin/nano
 
 #   Set default blocksize for ls, df, du
-#   from this: http://hints.macworld.com/comment.php?mode=view&cid=24491
-#   ------------------------------------------------------------
 export BLOCKSIZE=1k
 
 #   Add color to terminal
-#   (this is all commented out as I use Mac Terminal Profiles)
-#   from http://osxdaily.com/2012/02/21/add-color-to-the-terminal-in-mac-os-x/
-#   ------------------------------------------------------------
 export CLICOLOR=1
 export LSCOLORS=ExFxBxDxCxegedabagacad
 
 #   Source ~/.bashrc
-#   ------------------------------------------------------------
 source ~/.bashrc
 
+#   Set Paths
+export PATH="$PATH:/usr/local/bin"
+export PATH="/usr/local/git/bin:/sw/bin:/usr/local:/usr/local/sbin:/usr/local/mysql/bin:$PATH"
+
 #   -----------------------------
-#   2.  MAKE TERMINAL BETTER
+#   2.  TERMINAL IMPROVEMENTS
 #   -----------------------------
 
 alias cp='cp -iv'                                                                         # Preferred 'cp' implementation
@@ -66,19 +49,7 @@ alias mv='mv -iv'                                                               
 alias mkdir='mkdir -pv'                                                                   # Preferred 'mkdir' implementation
 alias ll='ls -FGlAhp'                                                                     # Preferred 'ls' implementation
 alias less='less -FSRXc'                                                                  # Preferred 'less' implementation
-cd() {
-  builtin cd "$@"
-  ll
-} # Always list directory contents upon 'cd'
-alias cd..='cd ../'                                                                       # Go back 1 directory level (for fast typers)
-alias ..='cd ../'                                                                         # Go back 1 directory level
-alias ...='cd ../../'                                                                     # Go back 2 directory levels
-alias .3='cd ../../../'                                                                   # Go back 3 directory levels
-alias .4='cd ../../../../'                                                                # Go back 4 directory levels
-alias .5='cd ../../../../../'                                                             # Go back 5 directory levels
-alias .6='cd ../../../../../../'                                                          # Go back 6 directory levels
-alias edit='subl'                                                                         # edit:         Opens any file in sublime editor
-alias f='open -a Finder ./'                                                               # f:            Opens current directory in MacOS Finder
+alias f='open -a Finder ./'                                                               # Opens current directory in MacOS Finder
 alias ~="cd ~"                                                                            # ~:            Go Home
 alias c='clear'                                                                           # c:            Clear terminal display
 alias which='type -all'                                                                   # which:        Find executables
@@ -86,52 +57,67 @@ alias path='echo -e ${PATH//:/\\n}'                                             
 alias show_options='shopt'                                                                # Show_options: display bash options settings
 alias fix_stty='stty sane'                                                                # fix_stty:     Restore terminal settings when screwed up
 alias cic='set completion-ignore-case On'                                                 # cic:          Make tab-completion case-insensitive
+alias pyjss='jss_helper -v'																  # JSS Python alias
+alias appVer='mdls -name kMDItemVersion' 												  # appVer:			Followed by path/to/app gives app version
+alias macModel=$(system_profiler SPHardwareDataType | grep "Model Identifier" | awk '{ print $3; }')
+alias activeFont=$(system_profiler SPFontsDataType | grep -i "Full Name" | awk '{$1=$2=""; print $0}')
+alias cls=$(clear)
+alias claer='clear'
+alias clr='clear' 																		  # cls: claer: clr: 3 ways of clearing the CLi
+
+# The following are additonal apps added after reading: https://remysharp.com/2018/08/23/cli-improved
+# Brew command:
+# brew install bat prettyping fzf glances diff-so-fancy fd nnn tldr ack ag jq
+
+alias cat='bat'
+alias ping='prettyping --nolegend'
+alias top='glances'
+alias du="ncdu --color dark -rr -x --exclude .git --exclude node_modules"
+alias help='tldr'
+alias preview="fzf --preview 'bat --color \"always\" {}'"
+# add support for ctrl+o to open selected file in VS Code
+export FZF_DEFAULT_OPTS="--bind='ctrl-o:execute(code {})+abort'"
+
+#   lr:  Full Recursive Directory Listing
+alias lr='ls -R | grep ":$" | sed -e '\''s/:$//'\'' -e '\''s/[^-][^\/]*\//--/g'\'' -e '\''s/^/   /'\'' -e '\''s/-/|/'\'' | less'
+
+# Directory Navigation
+alias cd..='cd ../'                                                                       # Go back 1 directory level (for fast typers)
+alias ..='cd ../'                                                                         # Go back 1 directory level
+alias ...='cd ../../'                                                                     # Go back 2 directory levels
+alias .3='cd ../../../'                                                                   # Go back 3 directory levels
+alias .4='cd ../../../../'                                                                # Go back 4 directory levels
+alias .5='cd ../../../../../'                                                             # Go back 5 directory levels
+alias .6='cd ../../../../../../'                                                          # Go back 6 directory levels
+
+
+#   -----------------------------
+#      TERMINAL FUNCTIONS
+#   -----------------------------
+
 mcd() { mkdir -p "$1" && cd "$1"; }                                                       # mcd:          Makes new Dir and jumps inside
 trash() { command mv "$@" ~/.Trash; }                                                     # trash:        Moves a file to the MacOS trash
 ql() { qlmanage -p "$*" >&/dev/null; }                                                    # ql:           Opens any file in MacOS Quicklook Preview
-appV() { mdls -name kMDItemVersion "$*"; }                                                # appV:					Gets the version of any app in path provided
-alias DT='tee ~/Desktop/terminalOut.txt'                                                  # DT:           Pipe content to file on MacOS Desktop
-
-#	Verify & Repair disk permissions
-#   ------------------------------------------
-alias verifyPerms='sudo /usr/libexec/repair_packages --verify --standard-pkgs /'          # Verify permissions on /
-alias repairPerms='sudo /usr/libexec/repair_packages --repair --standard-pkgs --volume /' # Repair permissions on /
-
-#   lr:  Full Recursive Directory Listing
-#   ------------------------------------------
-alias lr='ls -R | grep ":$" | sed -e '\''s/:$//'\'' -e '\''s/[^-][^\/]*\//--/g'\'' -e '\''s/^/   /'\'' -e '\''s/-/|/'\'' | less'
-
-#   mans:   Search manpage given in agument '1' for term given in argument '2' (case insensitive)
-#           displays paginated result with colored search terms and two lines surrounding each hit.             Example: mans mplayer codec
-#   --------------------------------------------------------------------
+appV() { mdls -name kMDItemVersion "$*"; }                                                # appV: 		  Gets the version of any app in path provided
+cd() { builtin cd "$@"
+  ll
+}
+																						  # Always list directory contents upon 'cd'
+#   mans: Example: mans mplayer codec
 mans() {
   man $1 | grep -iC2 --color=always $2 | less
 }
 
 #	Check SHA1 with value in clipboard
-#   ------------------------------------------
 shachk() {
   [[ $(pbpaste) == $(shasum "$@" | awk '{print $1}') ]] &&
     echo $1 == $(pbpaste) $'\e[1;32mMATCHES\e[0m' && return
   echo $1 != $(pbpaste) $'\e[1;31mFAILED\e[0m'
 }
-#   ------------------------------------------
-
 #   showa: to remind yourself of an alias (given some part of it)
-#   ------------------------------------------------------------
 showa() { /usr/bin/grep --color=always -i -a1 $@ ~/Library/init/bash/aliases.bash | grep -v '^\s*$' | less -FSRXc; }
 
-#   ------------------------------------------
-#	JSS PYTHON ALIASES
-alias pyjss='jss_helper -v'
 
-#   SSH Fixes and aliases
-#   ------------------------------------------------------------
-#alias sshsock='unset SSH_AUTH_SOCK'			# sshsock		unsets the sock if SSH stops working
-#	Fixes the SSH issue where its not loading properly
-#alias sshfix='launchctl unload /System/Library/LaunchAgents/org.openbsd.ssh-agent.plist \
-#			&& launchctl load -w /System/Library/LaunchAgents/org.openbsd.ssh-agent.plist \
-#				&& launchctl start org.openbsd.ssh-agent'
 #   -------------------------------
 #   3.  FILE AND FOLDER MANAGEMENT
 #   -------------------------------
@@ -184,6 +170,7 @@ extract() {
   fi
 }
 
+
 #   ---------------------------
 #   4.  SEARCHING
 #   ---------------------------
@@ -196,6 +183,7 @@ ffe() { /usr/bin/find . -name '*'"$@"; } # ffe:      Find file whose name ends w
 #   spotlight: Search for a file using MacOS Spotlight's metadata
 #   -----------------------------------------------------------
 spotlight() { mdfind "kMDItemDisplayName == '$@'wc"; }
+
 
 #   ---------------------------
 #   5.  PROCESS MANAGEMENT
@@ -233,14 +221,15 @@ alias ttop="top -R -F -s 10 -o rsize"
 #   ------------------------------------------------------------
 my_ps() { ps $@ -u $USER -o pid,%cpu,%mem,start,time,bsdtime,command; }
 
+
 #   ---------------------------
 #   6.  NETWORKING
 #   ---------------------------
 
-alias myip='dig +short myip.opendns.com @resolver1.opendns.com' # myip:         Public facing IP Address
-alias netCons='lsof -i'                                         # netCons:      Show all open TCP/IP sockets
 # flushDNS:     Flush out the DNS Cache
 alias flushDNS='dscacheutil -flushcache && sudo killall -HUP mDNSResponder'
+alias myip='dig +short myip.opendns.com @resolver1.opendns.com' # myip:         Public facing IP Address
+alias netCons='lsof -i'                                         # netCons:      Show all open TCP/IP sockets
 alias lsock='sudo /usr/sbin/lsof -i -P'           # lsock:        Display open sockets
 alias lsockU='sudo /usr/sbin/lsof -nP | grep UDP' # lsockU:       Display only open UDP sockets
 alias lsockT='sudo /usr/sbin/lsof -nP | grep TCP' # lsockT:       Display only open TCP sockets
@@ -268,85 +257,3 @@ ii() {
   #echo -e "\n${RED}DNS Configuration:$NC " ; scutil --dns
   echo
 }
-
-#   ---------------------------------------
-#   7.  SYSTEMS OPERATIONS & INFORMATION
-#   ---------------------------------------
-
-alias mountReadWrite='/sbin/mount -uw /' # mountReadWrite:   For use when booted into single-user
-
-#   cleanupDS:  Recursively delete .DS_Store files
-#   -------------------------------------------------------------------
-alias cleanupDS="find . -type f -name '*.DS_Store' -ls -delete"
-
-#   finderShowHidden:   Show hidden files in Finder
-#   finderHideHidden:   Hide hidden files in Finder
-#   -------------------------------------------------------------------
-alias finderShowHidden='defaults write com.apple.finder ShowAllFiles TRUE'
-alias finderHideHidden='defaults write com.apple.finder ShowAllFiles FALSE'
-
-#   cleanupLS:  Clean up LaunchServices to remove duplicates in the "Open With" menu
-#   -----------------------------------------------------------------------------------
-alias cleanupLS="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
-
-#    screensaverDesktop: Run a screensaver on the Desktop
-#   -----------------------------------------------------------------------------------
-alias screensaverDesktop='/System/Library/Frameworks/ScreenSaver.framework/Resources/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine -background'
-
-#   ---------------------------------------
-#   8.  WEB DEVELOPMENT
-#   ---------------------------------------
-
-#	Apache
-#   ---------------------------------------
-alias apacheEdit='sudo edit /etc/httpd/httpd.conf'    # apacheEdit:       Edit httpd.conf
-alias apacheRestart='sudo apachectl graceful'         # apacheRestart:    Restart Apache
-alias editHosts='sudo edit /etc/hosts'                # editHosts:        Edit /etc/hosts file
-alias herr='tail /var/log/httpd/error_log'            # herr:             Tails HTTP error logs
-alias apacheLogs="less +F /var/log/apache2/error_log" # Apachelogs:   	Shows apache error logs
-httpHeaders() { /usr/bin/curl -I -L $@; }             # httpHeaders:      Grabs headers from web page
-
-#   httpDebug:  Download a web page and show info on what took time
-#   -------------------------------------------------------------------
-httpDebug() { /usr/bin/curl $@ -o /dev/null -w "dns: %{time_namelookup} connect: %{time_connect} pretransfer: %{time_pretransfer} starttransfer: %{time_starttransfer} total: %{time_total}\n"; }
-
-#   ---------------------------------------
-#   9.  MY ADDITIONAL ALIASES
-#   ---------------------------------------
-
-alias appVer='mdls -name kMDItemVersion' # appVer:			Followed by path/to/app gives app version
-alias macModel=$(system_profiler SPHardwareDataType | grep "Model Identifier" | awk '{ print $3; }')
-alias activeFont=$(system_profiler SPFontsDataType | grep -i "Full Name" | awk '{$1=$2=""; print $0}')
-alias cls=$(clear)
-alias claer='clear'
-alias clr='clear' # cls: claer: clr: 3 ways of clearing the CLi
-
-#   ---------------------------------------
-#   10.  REMINDERS & NOTES
-#   ---------------------------------------
-
-#   remove_disk: spin down unneeded disk
-#   ---------------------------------------
-#   diskutil eject /dev/disk1s3
-
-#   to change the password on an encrypted disk image:
-#   ---------------------------------------
-#   hdiutil chpass /path/to/the/diskimage
-
-#   to mount a read-only disk image as read-write:
-#   ---------------------------------------
-#   hdiutil attach example.dmg -shadow /tmp/example.shadow -noverify
-
-#   mounting a removable drive (of type msdos or hfs)
-#   ---------------------------------------
-#   mkdir /Volumes/Foo
-#   ls /dev/disk*   to find out the device to use in the mount command)
-#   mount -t msdos /dev/disk1s1 /Volumes/Foo
-#   mount -t hfs /dev/disk1s1 /Volumes/Foo
-
-#   to create a file of a given size: /usr/sbin/mkfile or /usr/bin/hdiutil
-#   ---------------------------------------
-#   e.g.: mkfile 10m 10MB.dat
-#   e.g.: hdiutil create -size 10m 10MB.dmg
-#   the above create files that are almost all zeros - if random bytes are desired
-#   then use: ~/Dev/Perl/randBytes 1048576 > 10MB.dat
