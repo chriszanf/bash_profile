@@ -2,7 +2,7 @@
 
 ### Bash Profile Settings
 
-I forked this bash_profile from Nathaniel Landau https://natelandau.com/my-mac-osx-bash_profile/ and added a few additions
+I forked this bash_profile from [Nathaniel Landau](https://natelandau.com/my-mac-osx-bash_profile/) and added a few additions
 
 Since then I have cleared out ones that I do not use much, if at all, and added a few of my own. I also had a re-arrangement of certain aliases groupings to make it a bit more tidy
 
