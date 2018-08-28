@@ -58,7 +58,7 @@ alias show_options='shopt'                                                      
 alias fix_stty='stty sane'                                                                # fix_stty:     Restore terminal settings when screwed up
 alias cic='set completion-ignore-case On'                                                 # cic:          Make tab-completion case-insensitive
 alias pyjss='jss_helper -v'																                                # JSS Python alias
-alias appVer='mdls -name kMDItemVersion' 												                          # appVer:			Followed by path/to/app gives app version
+alias appV='mdls -name kMDItemVersion' 												                          # appVer:			Followed by path/to/app gives app version
 alias macModel=$(system_profiler SPHardwareDataType | grep "Model Identifier" | awk '{ print $3; }')
 alias activeFont=$(system_profiler SPFontsDataType | grep -i "Full Name" | awk '{$1=$2=""; print $0}')
 alias cls=$(clear)
@@ -74,6 +74,7 @@ alias ping='prettyping --nolegend'
 alias top='glances'
 alias du="ncdu --color dark -rr -x --exclude .git --exclude node_modules"
 alias help='tldr'
+alias top='glances'
 alias preview="fzf --preview 'bat --color \"always\" {}'"
 # add support for ctrl+o to open selected file in VS Code
 export FZF_DEFAULT_OPTS="--bind='ctrl-o:execute(code {})+abort'"
